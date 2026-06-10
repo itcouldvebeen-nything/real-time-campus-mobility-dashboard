@@ -1,0 +1,99 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  PASSENGER
+  DRIVER
+}
+
+enum DriverStatus {
+  OFFLINE
+  ONLINE
+  BUSY
+}
+
+enum RideStatus {
+  REQUESTED
+  ACCEPTED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  phone     String?
+  role      UserRole
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  driverProfile   DriverProfile?
+  passengerRides  Ride[]         @relation("PassengerRides")
+  ratingsGiven    Rating[]       @relation("RatingsGiven")
+}
+
+model DriverProfile {
+  id               String       @id @default(cuid())
+  userId           String       @unique
+  vehicleNumber    String
+  vehicleType      String       @default("E-Rickshaw")
+  licenseNumber    String
+  isVerified       Boolean      @default(false)
+  status           DriverStatus @default(OFFLINE)
+  currentLat       Float?
+  currentLng       Float?
+  totalRides       Int          @default(0)
+  averageRating    Float        @default(0)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rides Ride[] @relation("DriverRides")
+}
+
+model Ride {
+  id              String     @id @default(cuid())
+  passengerId     String
+  driverId        String?
+  pickupLocation  String
+  pickupLat       Float
+  pickupLng       Float
+  destination     String
+  destLat         Float
+  destLng         Float
+  status          RideStatus @default(REQUESTED)
+  fare            Float?
+  scheduledAt     DateTime?
+  requestedAt     DateTime   @default(now())
+  acceptedAt      DateTime?
+  startedAt       DateTime?
+  completedAt     DateTime?
+  cancelledAt     DateTime?
+  cancelReason    String?
+
+  passenger User           @relation("PassengerRides", fields: [passengerId], references: [id])
+  driver    DriverProfile? @relation("DriverRides", fields: [driverId], references: [id])
+  rating    Rating?
+}
+
+model Rating {
+  id        String   @id @default(cuid())
+  rideId    String   @unique
+  driverId  String
+  passengerId String
+  score     Int
+  feedback  String?
+  createdAt DateTime @default(now())
+
+  ride Ride @relation(fields: [rideId], references: [id], onDelete: Cascade)
+  passenger User @relation("RatingsGiven", fields: [passengerId], references: [id])
+}
