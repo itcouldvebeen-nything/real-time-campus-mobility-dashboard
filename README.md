@@ -46,7 +46,7 @@ Built for the **Real-Time Campus Mobility and Ride Management** challenge, the p
 ### 1. Clone the repository
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/itcouldvebeen-nything/real-time-campus-mobility-dashboard
 cd Cult
 ```
 
