@@ -8,6 +8,12 @@ CultRide solves fragmented campus transportation by providing a centralized digi
 
 Built for the **Real-Time Campus Mobility and Ride Management** challenge, the platform demonstrates real-time communication, geospatial data handling, ride assignment workflows, state synchronization, and multi-user coordination.
 
+## Team Members
+
+- Astha Pokhariya — 23118016
+- Ishaan Chhaparwal — 23118036
+- Harshill Utsav K A — 23118033
+
 ## Technology Stack
 
 | Layer | Technologies |
@@ -67,10 +73,10 @@ Default values work for local development.
 ### 4. Initialize database
 
 ```bash
-npm run db:setup --prefix backend
+npm run setup
 ```
 
-This creates the SQLite database, runs migrations, and seeds demo data.
+This installs dependencies, generates Prisma client code, pushes the SQLite schema, and seeds demo data.
 
 ### 5. Run the application
 
@@ -165,6 +171,3 @@ Cult/
 
 See [docs/DESIGN.md](docs/DESIGN.md) for system architecture, database schema, ERD, API design, and design decisions. Export to PDF for submission.
 
-## License
-
-MIT
